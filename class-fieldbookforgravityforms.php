@@ -21,8 +21,8 @@ if( class_exists("GFForms")) {
 
 		private $all_tables;
 
-		function __construct() {
-			parent::__construct();
+		public function init() {
+			parent::init();
 			$this->api_key    = $this->get_plugin_setting( 'api_key' );
 			$this->api_secret = $this->get_plugin_setting( 'api_secret' );
 			$this->book_id    = $this->book_url_to_id();
