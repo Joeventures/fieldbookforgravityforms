@@ -19,6 +19,16 @@ if( class_exists("GFForms")) {
 		private $api_secret;
 		private $book_id;
 
+		private $all_tables;
+
+		function __construct() {
+			parent::__construct();
+			$this->api_key    = $this->get_plugin_setting( 'api_key' );
+			$this->api_secret = $this->get_plugin_setting( 'api_secret' );
+			$this->book_id    = $this->book_url_to_id();
+			$this->all_tables = $this->get_tables();
+		}
+
 		/**
 		 * Get an instance of this class.
 		 *
@@ -66,5 +76,40 @@ if( class_exists("GFForms")) {
 				),
 			);
 		}
+
+		/**
+		 * Accept a book URL or book ID
+		 *
+		 * @param $book string
+		 *
+		 * @return string
+		 */
+		public function book_url_to_id() {
+			$book = $this->get_plugin_setting( 'book_id' );
+			if ( filter_var( $book, FILTER_VALIDATE_URL ) ) {
+				$book = explode( '/', $book );
+				$book = end( $book );
+			}
+
+			return $book;
+		}
+
+		/**
+		 * Get an array of tables in the Fieldbook Book
+		 *
+		 * @return array
+		 */
+		function get_tables() {
+			$fb_connect = array(
+				'api_key'    => $this->api_key,
+				'api_secret' => $this->api_secret,
+				'book_id'    => $this->book_id
+			);
+			$fb         = new PhieldBook( $fb_connect );
+			$tables     = $fb->get();
+
+			return $tables;
+		}
+
 	}
 }
