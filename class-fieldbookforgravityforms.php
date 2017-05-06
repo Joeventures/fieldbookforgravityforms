@@ -4,6 +4,7 @@ if( class_exists("GFForms")) {
 	GFForms::include_feed_addon_framework();
 
 	class FieldBookForGForms extends GFFeedAddOn {
+		public $_async_feed_processing = true;
 		protected $_version = '1.0';
 		protected $_min_gravityforms_version = '2.2';
 		protected $_slug = 'gravityfield';
