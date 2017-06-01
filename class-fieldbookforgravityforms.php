@@ -3,15 +3,15 @@
 if( class_exists("GFForms")) {
 	GFForms::include_feed_addon_framework();
 
-	class FieldBookForGForms extends GFFeedAddOn {
+	class FieldbookForGForms extends GFFeedAddOn {
 		public $_async_feed_processing = true;
 		protected $_version = '1.0';
 		protected $_min_gravityforms_version = '2.2';
 		protected $_slug = 'gravityfield';
 		protected $_path = 'fieldbookforgravityforms/fieldbookforgravityforms.php';
 		protected $_full_path = __FILE__;
-		protected $_title = 'FieldBook for Gravity Forms';
-		protected $_short_title = 'FieldBook';
+		protected $_title = 'Fieldbook for Gravity Forms';
+		protected $_short_title = 'Fieldbook';
 
 		private static $_instance = null;
 
@@ -33,11 +33,11 @@ if( class_exists("GFForms")) {
 		/**
 		 * Get an instance of this class.
 		 *
-		 * @return FieldBookForGForms
+		 * @return FieldbookForGForms
 		 */
 		public static function get_instance() {
 			if ( self::$_instance == null ) {
-				self::$_instance = new FieldBookForGForms();
+				self::$_instance = new FieldbookForGForms();
 			}
 			return self::$_instance;
 		}
@@ -50,7 +50,7 @@ if( class_exists("GFForms")) {
 		public function plugin_settings_fields() {
 			return array(
 				array(
-					'title'  => 'FieldBook API Settings',
+					'title'  => 'Fieldbook API Settings',
 					"fields" => array(
 						array(
 							'name'       => 'api_key',
