@@ -180,6 +180,25 @@ if( class_exists("GFForms")) {
 		}
 
 		/**
+		 * Format the list of fields in the Fieldbook table into [name] and [label]. Meant to use for building the Fieldbook Key Field options
+		 *
+		 * @return array
+		 */
+		function map_fb_fields_for_match() {
+			$table = $this->get_setting('sheet_name');
+			$fields = $this->get_fields($table);
+			$field_map = array();
+			foreach($fields as $field) {
+				$label = $field['name'] == '' ? $field['slug'] : $field['name'];
+				$field_map[] = array(
+					'value' => $field['slug'],
+					'label' => $label
+				);
+			}
+			return $field_map;
+		}
+
+		/**
 		 * Configures which columns should be displayed on the feed list page.
 		 *
 		 * @return array
@@ -233,15 +252,8 @@ if( class_exists("GFForms")) {
 							'type' => 'field_map',
 							'field_map' => $this->map_fields()
 						),
-						array(
-							'label' => 'Key Field',
-							'name' => 'key_field',
-							'type' => 'field_select',
-							'dependency' => array(
-								'field' => 'feed_type',
-								'values' => array('update')
-							)
-						),
+						$this->do_field_key_field(),
+						$this->do_field_fb_key_field(),
 						array(
 							'type' => 'feed_condition',
 							'name' => 'feed_condition',
@@ -303,6 +315,36 @@ if( class_exists("GFForms")) {
 			);
 		}
 
+		public function do_field_key_field() {
+
+			return array(
+				'label' => 'Form Key Field',
+				'name' => 'key_field',
+				'type' => 'field_select',
+				'dependency' => array(
+					'field' => 'feed_type',
+					'values' => array('update')
+				)
+			);
+		}
+
+		public function do_field_fb_key_field() {
+
+			$choices = $this->map_fb_fields_for_match();
+
+			return array(
+				'label' => 'Fieldbook Key Field',
+				'name' => 'fb_key_field',
+				'type' => 'select',
+				'dependency' => array(
+					'field' => 'feed_type',
+					'values' => array('update')
+				),
+				'choices' => $choices
+			);
+
+		}
+
 		public function do_field_sheet_name($label = 'Sheet Name') {
 
 			$choices = array();
@@ -356,12 +398,11 @@ if( class_exists("GFForms")) {
 			} elseif($feed_type == 'update') {
 
 				$key_field_id = strval($feed['meta']['key_field']);
-				$key_field_name = array_flip($fields)[$key_field_id];
+				$key_field_name = $feed['meta']['fb_key_field'];
 				$key_field_value = $this->get_field_value($form,$entry,$key_field_id);
 
 				$find_param = array($key_field_name => $key_field_value);
 				$fieldbook_record = $fb->search($find_param);
-
 				if(count($fieldbook_record) > 0) {
 					$update_id = $fieldbook_record[0]['id'];
 					$fb->record_id = $update_id;
