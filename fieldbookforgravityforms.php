@@ -2,7 +2,7 @@
 /*
 Plugin Name: Fieldbook for Gravity Forms
 Description: Send Gravity Form submissions to Fieldbook.
-Version: 0.1
+Version: 1.0.0
 Author: Joe Winter
 Author URI: https://joe.ventures
 License: GPL2
