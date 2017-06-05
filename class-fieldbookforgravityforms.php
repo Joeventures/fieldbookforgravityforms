@@ -5,7 +5,7 @@ if( class_exists("GFForms")) {
 
 	class FieldbookForGForms extends GFFeedAddOn {
 		public $_async_feed_processing = true;
-		protected $_version = '1.0';
+		protected $_version = '1.1.0';
 		protected $_min_gravityforms_version = '2.2';
 		protected $_slug = 'gravityfield';
 		protected $_path = 'fieldbookforgravityforms/fieldbookforgravityforms.php';
@@ -319,7 +319,11 @@ if( class_exists("GFForms")) {
 				'label' => 'Map Key Fields',
 				'name' => 'map_key_fields',
 				'type' => 'field_map',
-				'field_map' => $this->map_fields()
+				'field_map' => $this->map_fields(),
+				'dependency' => array(
+					'field' => 'feed_type',
+					'values' => array('update')
+				)
 			);
 		}
 
