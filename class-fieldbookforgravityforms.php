@@ -5,7 +5,7 @@ if( class_exists("GFForms")) {
 
 	class FieldbookForGForms extends GFFeedAddOn {
 		public $_async_feed_processing = true;
-		protected $_version = '1.0';
+		protected $_version = '1.1.0';
 		protected $_min_gravityforms_version = '2.2';
 		protected $_slug = 'gravityfield';
 		protected $_path = 'fieldbookforgravityforms/fieldbookforgravityforms.php';
@@ -252,8 +252,7 @@ if( class_exists("GFForms")) {
 							'type' => 'field_map',
 							'field_map' => $this->map_fields()
 						),
-						$this->do_field_key_field(),
-						$this->do_field_fb_key_field(),
+						$this->do_field_map_key_fields(),
 						array(
 							'type' => 'feed_condition',
 							'name' => 'feed_condition',
@@ -315,34 +314,17 @@ if( class_exists("GFForms")) {
 			);
 		}
 
-		public function do_field_key_field() {
-
+		public function do_field_map_key_fields() {
 			return array(
-				'label' => 'Form Key Field',
-				'name' => 'key_field',
-				'type' => 'field_select',
+				'label' => 'Map Key Fields',
+				'name' => 'map_key_fields',
+				'type' => 'field_map',
+				'field_map' => $this->map_fields(),
 				'dependency' => array(
 					'field' => 'feed_type',
 					'values' => array('update')
 				)
 			);
-		}
-
-		public function do_field_fb_key_field() {
-
-			$choices = $this->map_fb_fields_for_match();
-
-			return array(
-				'label' => 'Fieldbook Key Field',
-				'name' => 'fb_key_field',
-				'type' => 'select',
-				'dependency' => array(
-					'field' => 'feed_type',
-					'values' => array('update')
-				),
-				'choices' => $choices
-			);
-
 		}
 
 		public function do_field_sheet_name($label = 'Sheet Name') {
@@ -396,12 +378,13 @@ if( class_exists("GFForms")) {
 			if($feed_type == 'create') {
 				$fb->create($params);
 			} elseif($feed_type == 'update') {
+				$search_fields = $this->get_field_map_fields($feed, 'map_key_fields');
+				$find_param = array();
+				foreach($search_fields as $fieldbook_field => $form_field) {
+					if($form_field == '') continue;
+					$find_param[$fieldbook_field] = $this->get_field_value($form, $entry, $form_field);
+				}
 
-				$key_field_id = strval($feed['meta']['key_field']);
-				$key_field_name = $feed['meta']['fb_key_field'];
-				$key_field_value = $this->get_field_value($form,$entry,$key_field_id);
-
-				$find_param = array($key_field_name => $key_field_value);
 				$fieldbook_record = $fb->search($find_param);
 				if(count($fieldbook_record) > 0) {
 					$update_id = $fieldbook_record[0]['id'];

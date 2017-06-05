@@ -12,7 +12,7 @@ Once you have your API key and secret, log in to your WordPress admin interface.
 
 For any form you build, you will see a "Fieldbook" option listed under each form's settings. Select whether you want the Fieldbook feed to only create new records, or update existing records. Then, choose your fieldbook sheet, and map the fields from your Fieldbook sheet to your form fields.
 
-If you chose the Update option, you will also need to specify a "key" field for both Fieldbook and your form. This helps Fieldbook for Gravity Forms find the record that needs to be updated. For example, if you have a "Name" column in your Fieldbook sheet, where each name is unique, Fieldbook for Gravity Forms will search for a record with a matching name and update that record upon form submission. To make that match happen, you would specify the name field in both your form and your Fieldbook sheet. If a matching record is not found, a new record will be created.
+If you chose the Update option, you will also need to map which fields in Fieldbook should match the data fed from your form. This helps Fieldbook for Gravity Forms find the record that needs to be updated. For example, if you have a "Name" column in your Fieldbook sheet, where each name is unique, Fieldbook for Gravity Forms will search for a record with a matching name and update that record upon form submission. To make that match happen, you would specify the name field in both your form and your Fieldbook sheet. If a matching record is not found, a new record will be created.
 
 You may need to create more than one Fieldbook feed if form submissions use fields that can be found in more than one sheet. For example, a donation form may need to create new records in your Donations sheet, but update existing records in your Donors sheet. Be careful in these types of situations and understand that the order that you create your feeds matters. To use the donation form example, make sure to create the "donors" feed first, then the "donations" feed after that. The reason: each donation must include a link to the donor. Fieldbook for Gravity Forms executes its feeds in the order they are created. If a donor doesn't exist when the donation record is created, then the donation record will not be linked to the proper donor.
 
@@ -26,6 +26,10 @@ For anything else related to Fieldbook for Gravity Forms, including the function
 
 * [Gravity Forms Add-On Framework](https://www.gravityhelp.com/documentation/category/add-on-framework/)
 * [Fieldbook](https://github.com/fieldbook/api-docs)
+
+## What's new in v1.1.0
+
+* **Breaking Change** Support for using multiple key fields through a key field mapper.
 
 ## Credits
 
